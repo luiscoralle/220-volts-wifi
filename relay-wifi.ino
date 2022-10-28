@@ -19,10 +19,10 @@
 #include <ESP8266mDNS.h>
 
 // Fill in your WiFi router SSID and password
-//const char* ssid = "MovistarFibra-1810"; //const char* ssid = "INFORMATICA-WiFi";
-//const char* password = "1051102334";
-const char* ssid = "INFORMATICA-WiFi";
-const char* password = "";
+const char* ssid = "MovistarFibra-1810"; //const char* ssid = "INFORMATICA-WiFi";
+const char* password = "1051102334";
+//const char* ssid = "INFORMATICA-WiFi";
+//const char* password = "";
 
 MDNSResponder mdns;
 
@@ -135,6 +135,16 @@ void handleNotFound()
   server.send(404, "text/plain", message);
 }
 
+
+void handleGetIP()
+{
+  server.send(200, "text/html", WiFi.localIP().toString() + "\r\n");
+  //returnOK();
+}
+
+
+
+
 void writeLED(bool LEDon)
 {
   // Note inverted logic for Adafruit HUZZAH board
@@ -172,6 +182,8 @@ void setup(void)
   server.on("/ledon", handleLEDon);
   server.on("/ledoff", handleLEDoff);
   server.onNotFound(handleNotFound);
+  server.on("/getip", handleGetIP);
+
 
   server.begin();
   Serial.print("Connect to http://esp8266WebForm.local or http://");
